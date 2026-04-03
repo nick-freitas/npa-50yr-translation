@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>50 Years of Japanese Police</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -267,6 +268,40 @@
       background: #3a4a6a;
     }
 
+    /* Org Chart Container (D3-rendered) */
+    .org-chart-container {
+      margin: 18px 0;
+      background: rgba(30, 28, 24, 0.6);
+      border: 1px solid #c4956a;
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .org-chart-container svg {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .org-chart-container .chart-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #e8913a;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #c4956a;
+    }
+
+    .japanese .org-chart-container {
+      font-size: 11px;
+      padding: 12px;
+    }
+
+    .japanese .org-chart-container .chart-title {
+      font-size: 13px;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .container {
@@ -374,6 +409,194 @@
       textCol.addEventListener('scroll',
         makeSyncHandler(textCol, '.text-page', pdfCol, '.pdf-page'));
     })();
+  </script>
+
+  <script>
+    /**
+     * D3.js Organizational Chart Renderer
+     *
+     * renderOrgChart(selector, chartData) draws an SVG org chart inside the
+     * element matched by `selector`.
+     *
+     * chartData = {
+     *   nodes: [ { id, label, x, y, w, h, type } ],
+     *   edges: [ { from, to, label, type, dash } ],
+     *   groups: [ { label, x, y, w, h, type } ],   // optional background groups
+     *   legends: [ { symbol, text } ],               // optional legend items
+     *   width, height                                 // SVG dimensions
+     * }
+     *
+     * Node types: "primary", "accent", "highlight", "area", "default", "branch-header", "small"
+     * Edge types: "vertical", "horizontal", "diagonal", "angle"
+     */
+    function renderOrgChart(selector, data) {
+      var container = document.querySelector(selector);
+      if (!container || !data) return;
+
+      var svg = d3.select(selector)
+        .append("svg")
+        .attr("width", data.width)
+        .attr("height", data.height)
+        .attr("viewBox", "0 0 " + data.width + " " + data.height)
+        .style("max-width", "100%")
+        .style("height", "auto");
+
+      // Define arrow markers
+      var defs = svg.append("defs");
+      defs.append("marker")
+        .attr("id", "arrowBrown-" + selector.replace(/[^a-zA-Z0-9]/g, ""))
+        .attr("viewBox", "0 0 10 6")
+        .attr("refX", 10)
+        .attr("refY", 3)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 5)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,0 L10,3 L0,6 Z")
+        .attr("fill", "#c4956a");
+
+      var markerId = "url(#arrowBrown-" + selector.replace(/[^a-zA-Z0-9]/g, "") + ")";
+
+      // Style maps
+      var boxStyles = {
+        "default":        { fill: "rgba(50,44,38,0.8)",  stroke: "#7a6a5a", textFill: "#e0d8d0", fontWeight: 500, fontSize: 11 },
+        "primary":        { fill: "rgba(196,149,106,0.15)", stroke: "#c4956a", textFill: "#f0e0c8", fontWeight: 600, fontSize: 11 },
+        "accent":         { fill: "rgba(232,145,58,0.15)",  stroke: "#e8913a", textFill: "#f5c890", fontWeight: 600, fontSize: 11 },
+        "highlight":      { fill: "rgba(232,145,58,0.25)",  stroke: "#e8913a", textFill: "#ffe0b0", fontWeight: 700, fontSize: 11 },
+        "area":           { fill: "rgba(40,36,32,0.5)",   stroke: "#7a6a5a", textFill: "#b0a898", fontWeight: 400, fontSize: 10, dash: "4,2" },
+        "small":          { fill: "rgba(50,44,38,0.8)",  stroke: "#7a6a5a", textFill: "#e0d8d0", fontWeight: 500, fontSize: 10 },
+        "branch-header":  { fill: "none",                  stroke: "#e8913a", textFill: "#e8913a", fontWeight: 700, fontSize: 12, strokeWidth: 2, rx: 12 },
+        "section-title":  { fill: "none",                  stroke: "none",    textFill: "#e8913a", fontWeight: 700, fontSize: 13 },
+        "subtitle":       { fill: "none",                  stroke: "none",    textFill: "#c4956a", fontWeight: 600, fontSize: 11 },
+        "note":           { fill: "none",                  stroke: "none",    textFill: "#a09080", fontWeight: 400, fontSize: 9, fontStyle: "italic" },
+        "coop":           { fill: "rgba(40,36,32,0.3)",  stroke: "#7a6a5a", textFill: "#c4956a", fontWeight: 600, fontSize: 9, dash: "3,2" },
+        "sec-box":        { fill: "rgba(50,44,38,0.7)",  stroke: "#7a6a5a", textFill: "#d0c8b8", fontWeight: 500, fontSize: 11 },
+        "sec-result":     { fill: "rgba(196,149,106,0.12)", stroke: "#c4956a", textFill: "#e8d0b0", fontWeight: 600, fontSize: 11 },
+        "div-header":     { fill: "rgba(50,44,38,0.8)",  stroke: "#5a5048", textFill: "#e0d0c0", fontWeight: 600, fontSize: 10 },
+        "div-header-active": { fill: "rgba(50,44,38,0.8)", stroke: "#c4956a", textFill: "#e8913a", fontWeight: 600, fontSize: 10 },
+        "div-body":       { fill: "rgba(40,36,32,0.6)",  stroke: "#5a5048", textFill: "#d0c0a8", fontWeight: 400, fontSize: 10 },
+        "div-body-active": { fill: "rgba(196,149,106,0.06)", stroke: "#c4956a", textFill: "#d0c0a8", fontWeight: 400, fontSize: 11 },
+      };
+
+      // Render optional groups (background rectangles)
+      if (data.groups) {
+        data.groups.forEach(function(g) {
+          var s = boxStyles[g.type] || boxStyles["default"];
+          svg.append("rect")
+            .attr("x", g.x).attr("y", g.y)
+            .attr("width", g.w).attr("height", g.h)
+            .attr("rx", s.rx || 5)
+            .attr("fill", s.fill)
+            .attr("stroke", s.stroke)
+            .attr("stroke-width", s.strokeWidth || 1)
+            .attr("stroke-dasharray", s.dash || null);
+        });
+      }
+
+      // Render edges
+      if (data.edges) {
+        data.edges.forEach(function(e) {
+          var line = svg.append("line")
+            .attr("x1", e.x1).attr("y1", e.y1)
+            .attr("x2", e.x2).attr("y2", e.y2)
+            .attr("stroke", "#c4956a")
+            .attr("stroke-width", 1.5);
+
+          if (e.dash) {
+            line.attr("stroke-dasharray", e.dash);
+          }
+          if (e.arrow !== false) {
+            line.attr("marker-end", markerId);
+          }
+
+          // Edge label
+          if (e.label) {
+            var mx = (e.x1 + e.x2) / 2;
+            var my = (e.y1 + e.y2) / 2;
+            var offsetX = e.labelOffsetX || 0;
+            var offsetY = e.labelOffsetY || 0;
+            // For vertical edges, place label to the right
+            if (Math.abs(e.x1 - e.x2) < 5) {
+              offsetX = offsetX || 4;
+            }
+            var labelLines = e.label.split("\n");
+            var labelG = svg.append("g");
+            labelLines.forEach(function(ll, li) {
+              labelG.append("text")
+                .attr("x", mx + offsetX)
+                .attr("y", my + offsetY + li * 11 - (labelLines.length - 1) * 5.5)
+                .attr("text-anchor", e.labelAnchor || "start")
+                .attr("font-size", 9)
+                .attr("font-weight", 600)
+                .attr("fill", "#c4956a")
+                .text(ll);
+            });
+          }
+        });
+      }
+
+      // Render nodes
+      if (data.nodes) {
+        data.nodes.forEach(function(n) {
+          var s = boxStyles[n.type] || boxStyles["default"];
+          var g = svg.append("g");
+          var rx = s.rx || 5;
+          var sw = s.strokeWidth || 1;
+
+          if (s.stroke !== "none") {
+            g.append("rect")
+              .attr("x", n.x).attr("y", n.y)
+              .attr("width", n.w).attr("height", n.h)
+              .attr("rx", rx)
+              .attr("fill", s.fill)
+              .attr("stroke", s.stroke)
+              .attr("stroke-width", sw)
+              .attr("stroke-dasharray", s.dash || null);
+          }
+
+          // Text (supports multiline via \n)
+          var lines = n.label.split("\n");
+          var totalTextH = lines.length * (s.fontSize + 2);
+          var startY = n.y + (n.h - totalTextH) / 2 + s.fontSize;
+
+          lines.forEach(function(line, li) {
+            g.append("text")
+              .attr("x", n.x + n.w / 2)
+              .attr("y", startY + li * (s.fontSize + 2))
+              .attr("text-anchor", "middle")
+              .attr("font-size", s.fontSize)
+              .attr("font-weight", s.fontWeight)
+              .attr("font-style", s.fontStyle || "normal")
+              .attr("fill", s.textFill)
+              .text(line);
+          });
+        });
+      }
+
+      // Render legend
+      if (data.legends) {
+        var legendY = data.height - 18;
+        var legendX = data.width / 2;
+        var totalW = 0;
+        data.legends.forEach(function(l) { totalW += (l.symbol.length + l.text.length) * 6 + 24; });
+        var curX = legendX - totalW / 2;
+
+        // Legend separator line
+        svg.append("line")
+          .attr("x1", 10).attr("y1", legendY - 12)
+          .attr("x2", data.width - 10).attr("y2", legendY - 12)
+          .attr("stroke", "#3a342e").attr("stroke-width", 1);
+
+        data.legends.forEach(function(l) {
+          svg.append("text")
+            .attr("x", curX).attr("y", legendY)
+            .attr("font-size", 10)
+            .attr("fill", "#8a8070")
+            .text(l.symbol + " = " + l.text);
+          curX += (l.symbol.length + l.text.length + 3) * 5.5 + 24;
+        });
+      }
+    }
   </script>
 
 </body>

@@ -8,6 +8,11 @@ converts to HTML, and injects into template.html to produce index.html.
 
 import re
 import os
+from charts import (
+    get_chart_page3_en, get_chart_page3_jp,
+    get_chart_page5_en, get_chart_page5_jp,
+    get_chart_page21_en, get_chart_page21_jp,
+)
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MD_FILE = os.path.join(SCRIPT_DIR, "F0200000_full_translation.md")
@@ -420,6 +425,62 @@ def generate_pdf_html(pages_dict):
     return "\n".join(parts)
 
 
+def _replace_chart_region(html, start_pattern, end_pattern, chart_html):
+    """Replace a region of HTML (from start_pattern to just before end_pattern) with chart HTML.
+
+    start_pattern: regex matching the first element to remove (inclusive)
+    end_pattern: regex matching the first element to keep after the chart (exclusive)
+    If end_pattern is None, replaces from start_pattern to end of string.
+    """
+    start_match = re.search(start_pattern, html)
+    if not start_match:
+        return html
+
+    before = html[:start_match.start()]
+
+    if end_pattern:
+        end_match = re.search(end_pattern, html[start_match.start():])
+        if end_match:
+            after = html[start_match.start() + end_match.start():]
+        else:
+            after = ""
+    else:
+        after = ""
+
+    return before + chart_html + "\n" + after
+
+
+# Chart replacement configs: (start_regex_en, end_regex_en, start_regex_jp, end_regex_jp)
+# Start = first element of chart content (inclusive, removed)
+# End = first element after chart content (exclusive, kept)
+CHART_REPLACEMENTS = {
+    3: {
+        "en_start": r'<p><strong>Figure 2-1:',
+        "en_end": r'<p><strong>\(3\)',
+        "jp_start": r'<p>図2-1',
+        "jp_end": r'<p>（3）',
+    },
+    5: {
+        "en_start": r'<p><strong>Figure 2-2:',
+        "en_end": r'<p><strong>Principles and Features',
+        "jp_start": r'<p>図2-2',
+        "jp_end": r'<p>新警察法の理念と特徴',
+    },
+    21: {
+        "en_start": None,  # Page 21 is entirely chart content
+        "en_end": None,
+        "jp_start": None,
+        "jp_end": None,
+    },
+}
+
+CHART_FNS = {
+    3: (get_chart_page3_en, get_chart_page3_jp),
+    5: (get_chart_page5_en, get_chart_page5_jp),
+    21: (get_chart_page21_en, get_chart_page21_jp),
+}
+
+
 def generate_text_html(pages_dict):
     """Generate HTML for the text column."""
     parts = []
@@ -429,6 +490,25 @@ def generate_text_html(pages_dict):
 
         english_html = md_to_html(data["english"])
         japanese_html = md_to_html(data["japanese"])
+
+        # Inject visual charts for specific pages
+        if page_num in CHART_FNS:
+            en_fn, jp_fn = CHART_FNS[page_num]
+            cfg = CHART_REPLACEMENTS[page_num]
+
+            if cfg["en_start"]:
+                english_html = _replace_chart_region(
+                    english_html, cfg["en_start"], cfg["en_end"], en_fn()
+                )
+            else:
+                english_html = en_fn()
+
+            if cfg["jp_start"]:
+                japanese_html = _replace_chart_region(
+                    japanese_html, cfg["jp_start"], cfg["jp_end"], jp_fn()
+                )
+            else:
+                japanese_html = jp_fn()
 
         parts.append(
             f'      <div class="text-page" data-page="{page_num}">\n'

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>50 Years of Japanese Police</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -267,6 +268,40 @@
       background: #3a4a6a;
     }
 
+    /* Org Chart Container (D3-rendered) */
+    .org-chart-container {
+      margin: 18px 0;
+      background: rgba(30, 28, 24, 0.6);
+      border: 1px solid #c4956a;
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .org-chart-container svg {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .org-chart-container .chart-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #e8913a;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #c4956a;
+    }
+
+    .japanese .org-chart-container {
+      font-size: 11px;
+      padding: 12px;
+    }
+
+    .japanese .org-chart-container .chart-title {
+      font-size: 13px;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .container {
@@ -412,35 +447,15 @@
       </div>
       <div class="text-page" data-page="3">
         <div class="page-label">Page 3 (p.69)</div>
-        <div class="english"><p><strong>Figure 2-1: Police Organization as Defined by the Old Police Law</strong></p>
-<p><strong>Police Organization as Defined by the Old Police Law</strong></p>
-<div class="chart">Prime Minister<br>
-▼ Jurisdiction<br>
-National Public Safety Commission<br>
-Direction and supervision<br>
-Prefectural Governor<br>
-▼ Jurisdiction<br>
-Prefectural Public Safety Commission<br>
-Operational management</div>
-<ul><li>National Rural Police -</li></ul>
-<div class="chart">National Rural Police Headquarters<br>
-Direction and supervision<br>
-Regional Police Bureau<br>
-Administrative management<br>
-Prefectural National Rural Police Headquarters<br>
-Direction and supervision<br>
-Police stations<br>
-Substations and residential posts</div>
-<p>x Operational management / Administrative management ◇ Mutual cooperation</p>
-<ul><li>Autonomous Police -</li></ul>
-<div class="chart">Municipal mayor<br>
-▼ Jurisdiction<br>
-Municipal Public Safety Commission<br>
-Management<br>
-Municipal police<br>
-Direction and supervision<br>
-Police stations</div>
-<p>Enforcement → Other areas (mainly rural villages) Enforcement → Cities and urban towns/villages with population of 5,000 or more</p>
+        <div class="english"><div class="org-chart-container">
+  <div class="chart-title">Figure 2-1: Organization of Police Under the Old Police Law</div>
+  <div id="chart-p3-en"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderOrgChart("#chart-p3-en", {"width": 920, "height": 519, "nodes": [{"id": "pm", "label": "Prime Minister", "x": 10, "y": 15, "w": 140, "h": 34, "type": "accent"}, {"id": "npsc", "label": "National Public\nSafety Commission", "x": 10, "y": 99, "w": 140, "h": 40, "type": "primary"}, {"id": "pg", "label": "Prefectural Governor", "x": 10, "y": 189, "w": 140, "h": 34, "type": "accent"}, {"id": "ppsc", "label": "Prefectural Public\nSafety Commission", "x": 10, "y": 273, "w": 140, "h": 40, "type": "primary"}, {"id": "nrp_label", "label": "\u25cf National Rural Police \u25cf", "x": 240, "y": 15, "w": 150, "h": 28, "type": "branch-header"}, {"id": "nrp_hq", "label": "NRP Headquarters", "x": 240, "y": 55, "w": 150, "h": 34, "type": "primary"}, {"id": "rpb", "label": "Regional Police Bureau", "x": 240, "y": 139, "w": 150, "h": 34, "type": "default"}, {"id": "pnrphq", "label": "Prefectural NRP HQ", "x": 240, "y": 223, "w": 150, "h": 34, "type": "default"}, {"id": "nrp_ps", "label": "Police Stations", "x": 240, "y": 307, "w": 150, "h": 34, "type": "default"}, {"id": "nrp_sub", "label": "Substations & Posts", "x": 250, "y": 371, "w": 130, "h": 28, "type": "small"}, {"id": "nrp_area", "label": "Other areas\n(mainly rural villages)", "x": 240, "y": 449, "w": 150, "h": 40, "type": "area"}, {"id": "mayor", "label": "Municipal Mayor", "x": 670, "y": 15, "w": 150, "h": 34, "type": "accent"}, {"id": "mpsc", "label": "Municipal Public\nSafety Commission", "x": 670, "y": 99, "w": 150, "h": 40, "type": "primary"}, {"id": "auto_label", "label": "\u25cf Autonomous Police \u25cf", "x": 500, "y": 15, "w": 140, "h": 28, "type": "branch-header"}, {"id": "mp", "label": "Municipal Police", "x": 500, "y": 55, "w": 140, "h": 34, "type": "primary"}, {"id": "auto_ps", "label": "Police Stations", "x": 500, "y": 139, "w": 140, "h": 34, "type": "default"}, {"id": "auto_area", "label": "Cities & towns\nwith pop. 5,000+", "x": 500, "y": 223, "w": 140, "h": 40, "type": "area"}, {"id": "coop_label", "label": "\u00d7 Oper./Admin Mgmt\n\u25c7 Mutual Cooperation", "x": 398, "y": 140, "w": 94, "h": 40, "type": "coop"}], "edges": [{"x1": 80.0, "y1": 49, "x2": 80.0, "y2": 99, "label": "Jurisdiction", "labelOffsetX": 4}, {"x1": 80.0, "y1": 223, "x2": 80.0, "y2": 273, "label": "Jurisdiction", "labelOffsetX": 4}, {"x1": 315.0, "y1": 89, "x2": 315.0, "y2": 139, "label": "Direction &\nSupervision", "labelOffsetX": 4}, {"x1": 315.0, "y1": 173, "x2": 315.0, "y2": 223, "label": "Admin Mgmt", "labelOffsetX": 4}, {"x1": 315.0, "y1": 257, "x2": 315.0, "y2": 307, "label": "Direction &\nSupervision", "labelOffsetX": 4}, {"x1": 315.0, "y1": 341, "x2": 315.0, "y2": 371, "arrow": false}, {"x1": 315.0, "y1": 399, "x2": 315.0, "y2": 449, "label": "Execution", "labelOffsetX": 4}, {"x1": 150, "y1": 119.0, "x2": 240, "y2": 72.0, "label": "Direction &\nSupervision", "labelOffsetX": 0, "labelOffsetY": -22, "labelAnchor": "middle"}, {"x1": 150, "y1": 293.0, "x2": 240, "y2": 240.0, "label": "Operational\nManagement", "labelOffsetX": 0, "labelOffsetY": -22, "labelAnchor": "middle"}, {"x1": 745.0, "y1": 49, "x2": 745.0, "y2": 99, "label": "Jurisdiction", "labelOffsetX": 4}, {"x1": 570.0, "y1": 89, "x2": 570.0, "y2": 139, "label": "Direction &\nSupervision", "labelOffsetX": 4}, {"x1": 570.0, "y1": 173, "x2": 570.0, "y2": 223, "label": "Execution", "labelOffsetX": 4}, {"x1": 670, "y1": 119.0, "x2": 640, "y2": 72.0, "label": "Management", "labelOffsetX": 0, "labelOffsetY": -14, "labelAnchor": "middle", "dash": "5,3"}, {"x1": 395, "y1": 120, "x2": 495, "y2": 120, "dash": "4,3", "arrow": false}, {"x1": 395, "y1": 200, "x2": 495, "y2": 200, "dash": "4,3", "arrow": false}]});
+    });
+  </script>
+</div>
 <p><strong>(3) Problems with the Old Police Law</strong></p>
 <p>The Old Police Law was of epoch-making significance as a measure to democratize the police; however, because the national circumstances of Japan were not fully taken into account, numerous problems arose from the very beginning of its implementation.</p>
 <p><strong>1. Problems Caused by the Fragmentation of Police Organizations</strong></p>
@@ -451,36 +466,15 @@ Police stations</div>
 <p>Despite the fact that police affairs possess both national and local characteristics, they were divided among organizations biased toward either a national or local character based on mere geographic divisions. Furthermore, the national government had no involvement at all in the Metropolitan Police Department, which handled affairs of a strongly national character as the capital's police force, and its expenses were borne by the municipality. Meanwhile, rural police forces handling affairs of a weakly national character were maintained by the national budget and were beyond the oversight of local government assemblies -- a contradictory arrangement.</p>
 <p><strong>4. Problems with the Public Safety Commission System and the Government's Responsibility for Public Safety</strong></p>
 <p>The Public Safety Commission system was highly valued as a new method of police management; however, conversely, the National Public Safety Commission had strong independence from the Cabinet. As a result, the Cabinet could not adequately fulfill its political responsibility regarding public safety, and questions were raised that this ran counter to the requirements of democracy from this perspective.</p></div>
-        <div class="japanese"><p>図2-1　旧警察法に定める警察の組織</p>
-<p>旧警察法に定める警察の組織</p>
-<div class="chart">内閣総理大臣<br>
-▼ 所轄<br>
-国家公安委員会<br>
-指揮監督<br>
-都道府県知事<br>
-▼ 所轄<br>
-都道府県公安委員会<br>
-運営管理</div>
-<div class="chart">●国家地方警察●<br>
-国家地方警察本部<br>
-指揮監督<br>
-警察管区本部<br>
-行政管理<br>
-都道府県<br>
-国家地方警察本部<br>
-指揮監督<br>
-警察署<br>
-派出所・駐在所</div>
-<p>×運営管理・行政管理 ◇相互協力</p>
-<div class="chart">●自治体警察●<br>
-市町村長<br>
-▼ 所轄<br>
-市町村公安委員会<br>
-管理<br>
-市町村警察<br>
-指揮監督<br>
-警察署</div>
-<p>執行　→　その他の地域（主として村落部） 執行　→　市及び人口5千人以上の市街的町村</p>
+        <div class="japanese"><div class="org-chart-container">
+  <div class="chart-title">図2-1：旧警察法に定める警察の組織</div>
+  <div id="chart-p3-jp"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderOrgChart("#chart-p3-jp", {"width": 835, "height": 525, "nodes": [{"id": "pm", "label": "\u5185\u95a3\u7dcf\u7406\u5927\u81e3", "x": 10, "y": 15, "w": 120, "h": 34, "type": "accent"}, {"id": "npsc", "label": "\u56fd\u5bb6\u516c\u5b89\u59d4\u54e1\u4f1a", "x": 10, "y": 99, "w": 120, "h": 34, "type": "primary"}, {"id": "pg", "label": "\u90fd\u9053\u5e9c\u770c\u77e5\u4e8b", "x": 10, "y": 183, "w": 120, "h": 34, "type": "accent"}, {"id": "ppsc", "label": "\u90fd\u9053\u5e9c\u770c\n\u516c\u5b89\u59d4\u54e1\u4f1a", "x": 10, "y": 267, "w": 120, "h": 40, "type": "primary"}, {"id": "nrp_label", "label": "\u25cf\u56fd\u5bb6\u5730\u65b9\u8b66\u5bdf\u25cf", "x": 220, "y": 15, "w": 140, "h": 28, "type": "branch-header"}, {"id": "nrp_hq", "label": "\u56fd\u5bb6\u5730\u65b9\u8b66\u5bdf\u672c\u90e8", "x": 220, "y": 55, "w": 140, "h": 34, "type": "primary"}, {"id": "rpb", "label": "\u8b66\u5bdf\u7ba1\u533a\u672c\u90e8", "x": 220, "y": 139, "w": 140, "h": 34, "type": "default"}, {"id": "pnrphq", "label": "\u90fd\u9053\u5e9c\u770c\n\u56fd\u5bb6\u5730\u65b9\u8b66\u5bdf\u672c\u90e8", "x": 220, "y": 223, "w": 140, "h": 40, "type": "default"}, {"id": "nrp_ps", "label": "\u8b66\u5bdf\u7f72", "x": 220, "y": 313, "w": 140, "h": 34, "type": "default"}, {"id": "nrp_sub", "label": "\u6d3e\u51fa\u6240\u30fb\u99d0\u5728\u6240", "x": 230, "y": 377, "w": 120, "h": 28, "type": "small"}, {"id": "nrp_area", "label": "\u305d\u306e\u4ed6\u306e\u5730\u57df\n\uff08\u4e3b\u3068\u3057\u3066\u6751\u843d\u90e8\uff09", "x": 220, "y": 455, "w": 140, "h": 40, "type": "area"}, {"id": "mayor", "label": "\u5e02\u753a\u6751\u9577", "x": 625, "y": 15, "w": 130, "h": 34, "type": "accent"}, {"id": "mpsc", "label": "\u5e02\u753a\u6751\u516c\u5b89\u59d4\u54e1\u4f1a", "x": 625, "y": 99, "w": 130, "h": 34, "type": "primary"}, {"id": "auto_label", "label": "\u25cf\u81ea\u6cbb\u4f53\u8b66\u5bdf\u25cf", "x": 465, "y": 15, "w": 130, "h": 28, "type": "branch-header"}, {"id": "mp", "label": "\u5e02\u753a\u6751\u8b66\u5bdf", "x": 465, "y": 55, "w": 130, "h": 34, "type": "primary"}, {"id": "auto_ps", "label": "\u8b66\u5bdf\u7f72", "x": 465, "y": 139, "w": 130, "h": 34, "type": "default"}, {"id": "auto_area", "label": "\u5e02\u53ca\u3073\u4eba\u53e35\u5343\u4eba\u4ee5\u4e0a\n\u306e\u5e02\u8857\u7684\u753a\u6751", "x": 465, "y": 223, "w": 130, "h": 40, "type": "area"}, {"id": "coop_label", "label": "\u00d7 \u904b\u55b6\u7ba1\u7406\u30fb\u884c\u653f\u7ba1\u7406\n\u25c7 \u76f8\u4e92\u5354\u529b", "x": 368, "y": 140, "w": 89, "h": 40, "type": "coop"}], "edges": [{"x1": 70.0, "y1": 49, "x2": 70.0, "y2": 99, "label": "\u6240\u8f44", "labelOffsetX": 4}, {"x1": 70.0, "y1": 217, "x2": 70.0, "y2": 267, "label": "\u6240\u8f44", "labelOffsetX": 4}, {"x1": 290.0, "y1": 89, "x2": 290.0, "y2": 139, "label": "\u6307\u63ee\u76e3\u7763", "labelOffsetX": 4}, {"x1": 290.0, "y1": 173, "x2": 290.0, "y2": 223, "label": "\u884c\u653f\u7ba1\u7406", "labelOffsetX": 4}, {"x1": 290.0, "y1": 263, "x2": 290.0, "y2": 313, "label": "\u6307\u63ee\u76e3\u7763", "labelOffsetX": 4}, {"x1": 290.0, "y1": 347, "x2": 290.0, "y2": 377, "arrow": false}, {"x1": 290.0, "y1": 405, "x2": 290.0, "y2": 455, "label": "\u57f7\u884c", "labelOffsetX": 4}, {"x1": 130, "y1": 116.0, "x2": 220, "y2": 72.0, "label": "\u6307\u63ee\u76e3\u7763", "labelOffsetX": 0, "labelOffsetY": -22, "labelAnchor": "middle"}, {"x1": 130, "y1": 287.0, "x2": 220, "y2": 243.0, "label": "\u904b\u55b6\u7ba1\u7406", "labelOffsetX": 0, "labelOffsetY": -22, "labelAnchor": "middle"}, {"x1": 690.0, "y1": 49, "x2": 690.0, "y2": 99, "label": "\u6240\u8f44", "labelOffsetX": 4}, {"x1": 530.0, "y1": 89, "x2": 530.0, "y2": 139, "label": "\u6307\u63ee\u76e3\u7763", "labelOffsetX": 4}, {"x1": 530.0, "y1": 173, "x2": 530.0, "y2": 223, "label": "\u57f7\u884c", "labelOffsetX": 4}, {"x1": 625, "y1": 116.0, "x2": 595, "y2": 72.0, "label": "\u7ba1\u7406", "labelOffsetX": 0, "labelOffsetY": -14, "labelAnchor": "middle", "dash": "5,3"}, {"x1": 365, "y1": 120, "x2": 460, "y2": 120, "dash": "4,3", "arrow": false}, {"x1": 365, "y1": 200, "x2": 460, "y2": 200, "dash": "4,3", "arrow": false}]});
+    });
+  </script>
+</div>
 <p>（3）旧警察法の問題点</p>
 <p>旧警察法は、警察の民主化を図るものとして画期的な意義を有するものであったが、我が国の国情が十分に加味されていない面もあって、施行当初から多くの問題が生じた。</p>
 <p>①　警察組織の細分化による問題</p>
@@ -512,19 +506,15 @@ Police stations</div>
       <div class="text-page" data-page="5">
         <div class="page-label">Page 5 (p.71)</div>
         <div class="english"><p>-ical neutrality -- that is, the question of how to harmonize these conflicting demands. As a result, the police law bill submitted to the 19th session of the National Diet aimed in the same direction as the bill submitted to the 15th session, while incorporating further revisions concerning the relationship between the Cabinet and the National Public Safety Commission, the degree of national government involvement in prefectural police, and the question of whether to retain or abolish metropolitan city police forces. Vigorous deliberations were conducted in the Diet, and after amendments were made -- including granting the National Public Safety Commission the authority to appoint and dismiss the Commissioner General of the National Police Agency, the Superintendent General of the Metropolitan Police Department, and the chiefs of prefectural police headquarters, and establishing metropolitan police bureaus in major cities -- the bill was passed on June 7, 1954 (Showa 29) and promulgated the following day, June 8, as Law No. 162.</p>
-<p><strong>Figure 2-2: Police Organization as Defined by the New Police Law</strong></p>
-<div class="chart">Prime Minister<br>
-▼ Jurisdiction<br>
-National Public Safety Commission<br>
-▼ Management<br>
-National Police Agency</div>
-<p>Prefectural Governor                Direction and supervision Jurisdiction Prefectural Public Safety Commission    Management    - Prefectural Police -</p>
-<div class="chart">Prefectural Police Headquarters<br>
-Direction and supervision<br>
-Police stations<br>
-Substations and residential posts</div>
-<p>Enforcement</p>
-<p>Area of each prefecture</p>
+<div class="org-chart-container">
+  <div class="chart-title">Figure 2-2: Organization of Police Under the New Police Law</div>
+  <div id="chart-p5-en"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderOrgChart("#chart-p5-en", {"width": 370, "height": 619, "nodes": [{"id": "pm", "label": "Prime Minister", "x": 200, "y": 15, "w": 150, "h": 34, "type": "accent"}, {"id": "npsc", "label": "National Public\nSafety Commission", "x": 190, "y": 99, "w": 170, "h": 40, "type": "primary"}, {"id": "npa", "label": "National Police Agency", "x": 200, "y": 189, "w": 150, "h": 34, "type": "highlight"}, {"id": "pp_label", "label": "Prefectural Police", "x": 195, "y": 273, "w": 160, "h": 26, "type": "branch-header"}, {"id": "pphq", "label": "Prefectural Police HQ", "x": 200, "y": 311, "w": 150, "h": 34, "type": "default"}, {"id": "ps", "label": "Police Stations", "x": 200, "y": 395, "w": 150, "h": 34, "type": "default"}, {"id": "sub", "label": "Substations &\nResidential Posts", "x": 210, "y": 459, "w": 130, "h": 40, "type": "small"}, {"id": "area", "label": "Each prefecture\u2019s\njurisdictional area", "x": 200, "y": 549, "w": 150, "h": 40, "type": "area"}, {"id": "gov", "label": "Prefectural\nGovernor", "x": 10, "y": 273, "w": 140, "h": 40, "type": "accent"}, {"id": "ppsc", "label": "Prefectural Public\nSafety Commission", "x": 10, "y": 363, "w": 140, "h": 40, "type": "primary"}], "edges": [{"x1": 275.0, "y1": 49, "x2": 275.0, "y2": 99, "label": "Jurisdiction", "labelOffsetX": 4}, {"x1": 275.0, "y1": 139, "x2": 275.0, "y2": 189, "label": "Management", "labelOffsetX": 4}, {"x1": 275.0, "y1": 223, "x2": 275.0, "y2": 273, "label": "Direction &\nSupervision", "labelOffsetX": 4}, {"x1": 275.0, "y1": 345, "x2": 275.0, "y2": 395, "label": "Direction &\nSupervision", "labelOffsetX": 4}, {"x1": 275.0, "y1": 429, "x2": 275.0, "y2": 459, "arrow": false}, {"x1": 275.0, "y1": 499, "x2": 275.0, "y2": 549, "label": "Execution", "labelOffsetX": 4}, {"x1": 80.0, "y1": 313, "x2": 80.0, "y2": 363, "label": "Jurisdiction", "labelOffsetX": 4}, {"x1": 150, "y1": 383.0, "x2": 200, "y2": 328.0, "label": "Management", "labelOffsetX": 0, "labelOffsetY": -22, "labelAnchor": "middle"}]});
+    });
+  </script>
+</div>
 <p><strong>Principles and Features of the New Police Law</strong></p>
 <p><strong>- Guaranteeing Democratic Operation of the Police</strong></p>
 <p>As with the Old Police Law, the Public Safety Commission system was retained at both the national and local levels to guarantee the democratic operation of the police. Additionally, by delegating police affairs to the prefectures as an entrusted function, the prefectural police were made subject to oversight by residents through the prefectural assemblies.</p>
@@ -533,19 +523,15 @@ Substations and residential posts</div>
 <p><strong>- Ensuring Political Neutrality and Cabinet Responsibility for Public Safety</strong></p>
 <p>Since the Cabinet bears responsibility to the Diet for police administration as well and holds the right to submit bills to the Diet, the Chairperson of the National Public Safety Commission was to be filled by a Minister of State. Furthermore, the appointment and dismissal of the Commissioner General of the National Police Agency and the Superintendent General of the Metropolitan Police Department were made subject to the approval of the Prime Minister, thereby clarifying the Cabinet's responsibility for public safety.</p></div>
         <div class="japanese"><p>治的中立性の確保という、相対立する要請をいかに調和させるかということであった。その結果、第19回国会に提出された警察法案は、第15回国会提出法案と同様の方向を目指しつつ、内閣と国家公安委員会との関係、都道府県警察に対する国の関与の程度、大都市警察の存廃等について更なる見直しを加えたものであった。国会では精力的に審議が行われ、警察庁長官、警視総監及び道府県警察本部長の任免権を国家公安委員会に付与すること、大都市に市警察部を置くことなどの修正が加えられた後、法案は29年6月7日に可決され、翌8日に法律第162号として公布された。</p>
-<p>図2-2　新警察法に定める警察の組織</p>
-<div class="chart">内閣総理大臣<br>
-▼ 所轄<br>
-国家公安委員会<br>
-▼ 管理<br>
-警察庁</div>
-<p>都道府県知事　　　　　　指揮監督 所轄 都道府県公安委員会　管理　●都道府県警察●</p>
-<div class="chart">都道府県警察本部<br>
-指揮監督<br>
-警察署<br>
-派出所・駐在所</div>
-<p>執行</p>
-<p>各都道府県の区域</p>
+<div class="org-chart-container">
+  <div class="chart-title">図2-2：新警察法に定める警察の組織</div>
+  <div id="chart-p5-jp"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderOrgChart("#chart-p5-jp", {"width": 350, "height": 595, "nodes": [{"id": "pm", "label": "\u5185\u95a3\u7dcf\u7406\u5927\u81e3", "x": 190, "y": 15, "w": 140, "h": 34, "type": "accent"}, {"id": "npsc", "label": "\u56fd\u5bb6\u516c\u5b89\u59d4\u54e1\u4f1a", "x": 185, "y": 99, "w": 150, "h": 34, "type": "primary"}, {"id": "npa", "label": "\u8b66\u5bdf\u5e81", "x": 190, "y": 183, "w": 140, "h": 34, "type": "highlight"}, {"id": "pp_label", "label": "\u25cf\u90fd\u9053\u5e9c\u770c\u8b66\u5bdf\u25cf", "x": 185, "y": 267, "w": 150, "h": 26, "type": "branch-header"}, {"id": "pphq", "label": "\u90fd\u9053\u5e9c\u770c\u8b66\u5bdf\u672c\u90e8", "x": 190, "y": 305, "w": 140, "h": 34, "type": "default"}, {"id": "ps", "label": "\u8b66\u5bdf\u7f72", "x": 190, "y": 389, "w": 140, "h": 34, "type": "default"}, {"id": "sub", "label": "\u6d3e\u51fa\u6240\u30fb\u99d0\u5728\u6240", "x": 200, "y": 453, "w": 120, "h": 28, "type": "small"}, {"id": "area", "label": "\u5404\u90fd\u9053\u5e9c\u770c\u306e\u533a\u57df", "x": 190, "y": 531, "w": 140, "h": 34, "type": "area"}, {"id": "gov", "label": "\u90fd\u9053\u5e9c\u770c\u77e5\u4e8b", "x": 10, "y": 267, "w": 130, "h": 34, "type": "accent"}, {"id": "ppsc", "label": "\u90fd\u9053\u5e9c\u770c\n\u516c\u5b89\u59d4\u54e1\u4f1a", "x": 10, "y": 351, "w": 130, "h": 40, "type": "primary"}], "edges": [{"x1": 260.0, "y1": 49, "x2": 260.0, "y2": 99, "label": "\u6240\u8f44", "labelOffsetX": 4}, {"x1": 260.0, "y1": 133, "x2": 260.0, "y2": 183, "label": "\u7ba1\u7406", "labelOffsetX": 4}, {"x1": 260.0, "y1": 217, "x2": 260.0, "y2": 267, "label": "\u6307\u63ee\u76e3\u7763", "labelOffsetX": 4}, {"x1": 260.0, "y1": 339, "x2": 260.0, "y2": 389, "label": "\u6307\u63ee\u76e3\u7763", "labelOffsetX": 4}, {"x1": 260.0, "y1": 423, "x2": 260.0, "y2": 453, "arrow": false}, {"x1": 260.0, "y1": 481, "x2": 260.0, "y2": 531, "label": "\u57f7\u884c", "labelOffsetX": 4}, {"x1": 75.0, "y1": 301, "x2": 75.0, "y2": 351, "label": "\u6240\u8f44", "labelOffsetX": 4}, {"x1": 140, "y1": 371.0, "x2": 190, "y2": 322.0, "label": "\u7ba1\u7406", "labelOffsetX": 0, "labelOffsetY": -22, "labelAnchor": "middle"}]});
+    });
+  </script>
+</div>
 <p>新警察法の理念と特徴</p>
 <p>■　警察の民主的運営の保障</p>
 <p>旧警察法と同じく、公安委員会制度を国と地方の双方で存続させ、警察の民主的な運営の保障を図るとともに、都道府県に警察事務を団体委任することで、都道府県議会を通じた住民の監視を受けることとした。</p>
@@ -887,87 +873,24 @@ Substations and residential posts</div>
       </div>
       <div class="text-page" data-page="21">
         <div class="page-label">Page 21 (p.87)</div>
-        <div class="english"><p>National Public Safety Commission 　National Police Agency　　　　　　Imperial Guard Headquarters 　　　　　　　　　　　　　　　　　● Provisions for the quasi-application of the Police Duties Execution Act established</p>
-<p>Commissioner General's Secretariat, etc.</p>
-<div class="chart"><strong>Criminal Investigation Bureau</strong><br>
-　Organized Crime Division<br>
-　　← Reorganized from the Anti-Boryokudan Division<br>
-　　- Anti-boryokudan measures<br>
-　　- Drug and firearms countermeasures<br>
-　　- Countermeasures against crimes by foreign nationals visiting Japan<br>
-　→　Integrated promotion</div>
-<ul><li>Planning and Analysis Section</li><li>Aggregation and analysis of information</li><li>Formulation of strategies for dismantling organizations</li><li>Anti-Boryokudan Section</li><li>Drug and Firearms Countermeasures Section</li><li>International Investigation Management Officer</li></ul>
-<div class="chart"><strong>Security Bureau</strong><br>
-　Foreign Affairs Intelligence Division<br>
-　　← Reorganized from the Secretariat International Division<br>
-　　- High-level negotiations with foreign security agencies<br>
-　　- Close and rapid information exchange<br>
-　→　Strengthening of intelligence gathering</div>
-<ul><li>Foreign Affairs Section</li><li>Crackdown on espionage activities</li><li>International Terrorism Countermeasures Section</li><li>Aggregation and analysis of international terrorism intelligence</li><li>"International Terrorism Emergency Deployment Unit"</li></ul>
-<p><strong>Community Safety Bureau</strong></p>
-<p>　Information Technology Crime Countermeasures Section 　　● Guidance and coordination of cyber crime investigations conducted by prefectural police</p>
-<p><strong>Information and Communications Bureau</strong></p>
-<p>　Prefectural Information and Communications Divisions 　　● Technical support for cyber crime investigations conducted by prefectural police</p>
-<p><em>Note: The establishment and names of sections and management officers are cabinet order matters (only those related to this Police Act amendment are listed).</em></p>
-<div class="chart">Police management for major terrorism cases<br>
-Handling of terrorism cases overseas involving Japanese victims<br>
-Liaison with foreign police administrative agencies<br>
-Technical support for cyber crime investigations</div>
-<p>Strengthening the NPA's initiative and clarifying the national government's responsibility for public security</p>
-<p>Prefectural Police Response</p>
-<div class="chart">Bomb terrorism cases / NBC terrorism cases<br>
-Terrorism cases overseas<br>
-International organized crime<br>
-Cyber crime</div></div>
-        <div class="japanese"><p>日本警察50年史　第2節</p>
-<h3>警察法の一部を改正する法律の概要</h3>
-<div class="chart"><strong>Overview of the Law Partially Amending the Police Act</strong><br>
-<strong>Subtitle Box:</strong><br>
-組織犯罪対策の強化／テロの未然防止／サイバー犯罪対策の強化<br>
-Strengthening of Organized Crime Countermeasures / Prevention of Terrorism / Strengthening of Cyber Crime Countermeasures</div>
-<h4>【①組織改正】 Organizational Reform</h4>
-<p>国家公安委員会 　警察庁　　　　　　　　　　　　　皇室警察本部 　　　　　　　　　　　　　　　　　● 警職法の準用規定を整備</p>
-<p>長官官房他</p>
-<div class="chart"><strong>刑事局</strong><br>
-　組織犯罪対策部<br>
-　　← 暴力団対策部を改組<br>
-　　・暴力団対策<br>
-　　・薬物・銃器対策<br>
-　　・来日外国人犯罪対策<br>
-　→　一体的に推進</div>
-<div class="chart">　─ 企画分析課<br>
-　　・情報の集約・分析<br>
-　　・組織壊滅の戦略策定<br>
-　─ 暴力団対策課<br>
-　─ 薬物銃器対策課<br>
-　─ 国際捜査管理官</div>
-<div class="chart"><strong>警備局</strong><br>
-　外事情報部<br>
-　　← 官房国際部を改組<br>
-　　・外国治安機関とのハイレベルの折衝<br>
-　　・緊密・迅速な情報交換<br>
-　→　情報収集の強化</div>
-<div class="chart">　─ 外事課<br>
-　　・諜報活動の取締り<br>
-　─ 国際テロリズム対策課<br>
-　　・国際テロ情報の集約・分析<br>
-　　・「国際テロリズム緊急展開班」</div>
-<p><strong>生活安全局</strong></p>
-<p>　情報技術犯罪対策課 　　● 都道府県警察が行うサイバー犯罪捜査の指導・調整</p>
-<p><strong>情報通信局</strong></p>
-<p>　都道府県情報通信部 　　● 都道府県警察が行うサイバー犯罪捜査への技術支援</p>
-<p>※課及び管理官の設置、名称は政令事項（今回の警察法改正に関係するもののみ記載）</p>
-<h4>【②国の治安責任】 National Government's Responsibility for Public Security</h4>
-<div class="chart">重大テロ事案に対する警察運営<br>
-国外における日本人被害のテロ事案の対処<br>
-外国の警察行政機関等との連絡<br>
-サイバー犯罪捜査への技術支援</div>
-<p>警察庁のイニシアティブを強化し、国の治安責任を明確化</p>
-<p>都道府県警察 対処</p>
-<div class="chart">爆弾テロ事案・NBCテロ事案<br>
-国外におけるテロ事案<br>
-国際組織犯罪<br>
-サイバー犯罪</div></div>
+        <div class="english"><div class="org-chart-container">
+  <div class="chart-title">Overview of the Law Partially Amending the Police Act</div>
+  <div id="chart-p21-en"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderOrgChart("#chart-p21-en", {"width": 900, "height": 646, "nodes": [{"id": "subtitle", "label": "Strengthening Organized Crime Countermeasures / Prevention of Terrorism / Strengthening Cyber Crime Countermeasures", "x": 0, "y": 0, "w": 900, "h": 18, "type": "subtitle"}, {"id": "sec1", "label": "\u2460 Organizational Reform", "x": 0, "y": 26, "w": 200, "h": 20, "type": "section-title"}, {"id": "npsc", "label": "National Public\nSafety Commission", "x": 20, "y": 56, "w": 150, "h": 34, "type": "primary"}, {"id": "npa", "label": "National Police\nAgency", "x": 200, "y": 56, "w": 130, "h": 34, "type": "highlight"}, {"id": "ig", "label": "Imperial\nGuard HQ", "x": 360, "y": 56, "w": 90, "h": 34, "type": "accent"}, {"id": "ig_note", "label": "Provisions for application\nof Police Duties Act revised", "x": 455, "y": 56, "w": 160, "h": 34, "type": "note"}, {"id": "d1h", "label": "Commissioner's\nSecretariat, etc.", "x": 10, "y": 108, "w": 155, "h": 36, "type": "div-header"}, {"id": "d2h", "label": "Criminal\nInvestigation Bureau", "x": 175, "y": 108, "w": 155, "h": 36, "type": "div-header-active"}, {"id": "d2b", "label": "Organized Crime Division\n\u2190 Reorg. from Anti-\nBoryokudan Div.\n\n\u2022 Anti-boryokudan measures\n\u2022 Drug & firearms countermeasures\n\u2022 Crimes by foreign nationals\n\n\u2192 Integrated promotion\n\nPlanning & Analysis\nAnti-Boryokudan\nDrug & Firearms\nInt'l Investigation Mgr.", "x": 175, "y": 145, "w": 155, "h": 195, "type": "div-body-active"}, {"id": "d3h", "label": "Security\nBureau", "x": 340, "y": 108, "w": 155, "h": 36, "type": "div-header-active"}, {"id": "d3b", "label": "Foreign Affairs\nIntelligence Div.\n\u2190 Reorg. from\nSecretariat Int'l Div.\n\n\u2022 High-level negotiations\n  with foreign agencies\n\u2022 Close & rapid info\n  exchange\n\n\u2192 Strengthened intelligence\n\nForeign Affairs Div.\nInt'l Terrorism\nCountermeasures", "x": 340, "y": 145, "w": 155, "h": 195, "type": "div-body-active"}, {"id": "d4h", "label": "Community\nSafety Bureau", "x": 505, "y": 108, "w": 155, "h": 36, "type": "div-header-active"}, {"id": "d4b", "label": "IT Crime\nCountermeasures\nDivision", "x": 505, "y": 145, "w": 155, "h": 50, "type": "div-body-active"}, {"id": "d5h", "label": "Info & Comms\nBureau", "x": 670, "y": 108, "w": 155, "h": 36, "type": "div-header-active"}, {"id": "d5b", "label": "Prefectural Info &\nCommunications\nDepartments", "x": 670, "y": 145, "w": 155, "h": 50, "type": "div-body-active"}, {"id": "sec2", "label": "\u2461 National Security Responsibility", "x": 0, "y": 380, "w": 280, "h": 20, "type": "section-title"}, {"id": "s1", "label": "Police management\nfor major terrorism\ncases", "x": 10, "y": 410, "w": 140, "h": 46, "type": "sec-box"}, {"id": "s2", "label": "Handling terrorism\noverseas involving\nJapanese victims", "x": 158, "y": 410, "w": 140, "h": 46, "type": "sec-box"}, {"id": "s3", "label": "Liaison with foreign\npolice agencies", "x": 306, "y": 410, "w": 140, "h": 46, "type": "sec-box"}, {"id": "s4", "label": "Technical support\nfor cyber crime\ninvestigations", "x": 454, "y": 410, "w": 140, "h": 46, "type": "sec-box"}, {"id": "smid", "label": "Strengthen NPA initiative &\nclarify national security responsibility", "x": 60, "y": 470, "w": 780, "h": 36, "type": "highlight"}, {"id": "sresp", "label": "Prefectural Police \u2192 Response", "x": 150, "y": 546, "w": 600, "h": 30, "type": "primary"}, {"id": "r1", "label": "Bomb / NBC\nterrorism", "x": 10, "y": 594, "w": 140, "h": 36, "type": "sec-result"}, {"id": "r2", "label": "Overseas\nterrorism", "x": 158, "y": 594, "w": 140, "h": 36, "type": "sec-result"}, {"id": "r3", "label": "International\norganized crime", "x": 306, "y": 594, "w": 140, "h": 36, "type": "sec-result"}, {"id": "r4", "label": "Cyber crime", "x": 454, "y": 594, "w": 140, "h": 36, "type": "sec-result"}], "edges": [{"x1": 170, "y1": 73.0, "x2": 200, "y2": 73.0, "arrow": false}, {"x1": 330, "y1": 73.0, "x2": 360, "y2": 73.0, "arrow": false}, {"x1": 265.0, "y1": 90, "x2": 265.0, "y2": 108, "arrow": false}, {"x1": 450.0, "y1": 506, "x2": 450.0, "y2": 546}, {"x1": 450.0, "y1": 576, "x2": 450.0, "y2": 594, "arrow": false}]});
+    });
+  </script>
+</div></div>
+        <div class="japanese"><div class="org-chart-container">
+  <div class="chart-title">警察法の一部を改正する法律の概要</div>
+  <div id="chart-p21-jp"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderOrgChart("#chart-p21-jp", {"width": 900, "height": 628, "nodes": [{"id": "subtitle", "label": "\u7d44\u7e54\u72af\u7f6a\u5bfe\u7b56\u306e\u5f37\u5316\uff0f\u30c6\u30ed\u306e\u672a\u7136\u9632\u6b62\uff0f\u30b5\u30a4\u30d0\u30fc\u72af\u7f6a\u5bfe\u7b56\u306e\u5f37\u5316", "x": 0, "y": 0, "w": 900, "h": 18, "type": "subtitle"}, {"id": "sec1", "label": "\u2460 \u7d44\u7e54\u6539\u6b63", "x": 0, "y": 26, "w": 150, "h": 20, "type": "section-title"}, {"id": "npsc", "label": "\u56fd\u5bb6\u516c\u5b89\u59d4\u54e1\u4f1a", "x": 40, "y": 56, "w": 130, "h": 30, "type": "primary"}, {"id": "npa", "label": "\u8b66\u5bdf\u5e81", "x": 210, "y": 56, "w": 100, "h": 30, "type": "highlight"}, {"id": "ig", "label": "\u7687\u5ba4\u8b66\u5bdf\u672c\u90e8", "x": 350, "y": 56, "w": 100, "h": 30, "type": "accent"}, {"id": "ig_note", "label": "\u25cf \u8b66\u8077\u6cd5\u306e\u6e96\u7528\u898f\u5b9a\u3092\u6574\u5099", "x": 455, "y": 56, "w": 160, "h": 30, "type": "note"}, {"id": "d1h", "label": "\u9577\u5b98\u5b98\u623f\u4ed6", "x": 10, "y": 104, "w": 155, "h": 28, "type": "div-header"}, {"id": "d2h", "label": "\u5211\u4e8b\u5c40", "x": 175, "y": 104, "w": 155, "h": 28, "type": "div-header-active"}, {"id": "d2b", "label": "\u7d44\u7e54\u72af\u7f6a\u5bfe\u7b56\u90e8\n\u2190 \u66b4\u529b\u56e3\u5bfe\u7b56\u90e8\u3092\u6539\u7d44\n\n\u2022 \u66b4\u529b\u56e3\u5bfe\u7b56\n\u2022 \u85ac\u7269\u30fb\u9283\u5668\u5bfe\u7b56\n\u2022 \u6765\u65e5\u5916\u56fd\u4eba\u72af\u7f6a\u5bfe\u7b56\n\n\u2192 \u4e00\u4f53\u7684\u306b\u63a8\u9032\n\n\u4f01\u753b\u5206\u6790\u8ab2\n\u66b4\u529b\u56e3\u5bfe\u7b56\u8ab2\n\u85ac\u7269\u9283\u5668\u5bfe\u7b56\u8ab2\n\u56fd\u969b\u6355\u67fb\u7ba1\u7406\u5b98", "x": 175, "y": 133, "w": 155, "h": 195, "type": "div-body-active"}, {"id": "d3h", "label": "\u8b66\u5099\u5c40", "x": 340, "y": 104, "w": 155, "h": 28, "type": "div-header-active"}, {"id": "d3b", "label": "\u5916\u4e8b\u60c5\u5831\u90e8\n\u2190 \u5b98\u623f\u56fd\u969b\u90e8\u3092\u6539\u7d44\n\n\u2022 \u5916\u56fd\u6cbb\u5b89\u6a5f\u95a2\u3068\u306e\n  \u30cf\u30a4\u30ec\u30d9\u30eb\u306e\u6298\u885d\n\u2022 \u7dca\u5bc6\u30fb\u8fc5\u901f\u306a\n  \u60c5\u5831\u4ea4\u63db\n\n\u2192 \u60c5\u5831\u53ce\u96c6\u306e\u5f37\u5316\n\n\u5916\u4e8b\u8ab2\n\u56fd\u969b\u30c6\u30ed\u30ea\u30ba\u30e0\u5bfe\u7b56\u8ab2", "x": 340, "y": 133, "w": 155, "h": 195, "type": "div-body-active"}, {"id": "d4h", "label": "\u751f\u6d3b\u5b89\u5168\u5c40", "x": 505, "y": 104, "w": 155, "h": 28, "type": "div-header-active"}, {"id": "d4b", "label": "\u60c5\u5831\u6280\u8853\u72af\u7f6a\n\u5bfe\u7b56\u8ab2", "x": 505, "y": 133, "w": 155, "h": 40, "type": "div-body-active"}, {"id": "d5h", "label": "\u60c5\u5831\u901a\u4fe1\u5c40", "x": 670, "y": 104, "w": 155, "h": 28, "type": "div-header-active"}, {"id": "d5b", "label": "\u90fd\u9053\u5e9c\u770c\n\u60c5\u5831\u901a\u4fe1\u90e8", "x": 670, "y": 133, "w": 155, "h": 40, "type": "div-body-active"}, {"id": "sec2", "label": "\u2461 \u56fd\u306e\u6cbb\u5b89\u8cac\u4efb", "x": 0, "y": 368, "w": 200, "h": 20, "type": "section-title"}, {"id": "s1", "label": "\u91cd\u5927\u30c6\u30ed\u4e8b\u6848\u306b\n\u5bfe\u3059\u308b\u8b66\u5bdf\u904b\u55b6", "x": 10, "y": 398, "w": 140, "h": 40, "type": "sec-box"}, {"id": "s2", "label": "\u56fd\u5916\u306b\u304a\u3051\u308b\n\u65e5\u672c\u4eba\u88ab\u5bb3\u306e\n\u30c6\u30ed\u4e8b\u6848\u306e\u5bfe\u51e6", "x": 158, "y": 398, "w": 140, "h": 40, "type": "sec-box"}, {"id": "s3", "label": "\u5916\u56fd\u306e\u8b66\u5bdf\u884c\u653f\n\u6a5f\u95a2\u7b49\u3068\u306e\u9023\u7d61", "x": 306, "y": 398, "w": 140, "h": 40, "type": "sec-box"}, {"id": "s4", "label": "\u30b5\u30a4\u30d0\u30fc\u72af\u7f6a\n\u6355\u67fb\u3078\u306e\u6280\u8853\u652f\u63f4", "x": 454, "y": 398, "w": 140, "h": 40, "type": "sec-box"}, {"id": "smid", "label": "\u8b66\u5bdf\u5e81\u306e\u30a4\u30cb\u30b7\u30a2\u30c6\u30a3\u30d6\u3092\u5f37\u5316\u3057\u3001\n\u56fd\u306e\u6cbb\u5b89\u8cac\u4efb\u3092\u660e\u78ba\u5316", "x": 60, "y": 452, "w": 780, "h": 36, "type": "highlight"}, {"id": "sresp", "label": "\u90fd\u9053\u5e9c\u770c\u8b66\u5bdf \u2192 \u5bfe\u51e6", "x": 150, "y": 528, "w": 600, "h": 30, "type": "primary"}, {"id": "r1", "label": "\u7206\u5f3e\u30c6\u30ed\nNBC\u30c6\u30ed", "x": 10, "y": 576, "w": 140, "h": 36, "type": "sec-result"}, {"id": "r2", "label": "\u56fd\u5916\u30c6\u30ed\n\u4e8b\u6848", "x": 158, "y": 576, "w": 140, "h": 36, "type": "sec-result"}, {"id": "r3", "label": "\u56fd\u969b\u7d44\u7e54\n\u72af\u7f6a", "x": 306, "y": 576, "w": 140, "h": 36, "type": "sec-result"}, {"id": "r4", "label": "\u30b5\u30a4\u30d0\u30fc\n\u72af\u7f6a", "x": 454, "y": 576, "w": 140, "h": 36, "type": "sec-result"}], "edges": [{"x1": 170, "y1": 71.0, "x2": 210, "y2": 71.0, "arrow": false}, {"x1": 310, "y1": 71.0, "x2": 350, "y2": 71.0, "arrow": false}, {"x1": 260.0, "y1": 86, "x2": 260.0, "y2": 104, "arrow": false}, {"x1": 450.0, "y1": 488, "x2": 450.0, "y2": 528}, {"x1": 450.0, "y1": 558, "x2": 450.0, "y2": 576, "arrow": false}]});
+    });
+  </script>
+</div></div>
       </div>
       <div class="text-page" data-page="22">
         <div class="page-label">Page 22 (p.88)</div>
@@ -1104,6 +1027,194 @@ Strengthening of Organized Crime Countermeasures / Prevention of Terrorism / Str
       textCol.addEventListener('scroll',
         makeSyncHandler(textCol, '.text-page', pdfCol, '.pdf-page'));
     })();
+  </script>
+
+  <script>
+    /**
+     * D3.js Organizational Chart Renderer
+     *
+     * renderOrgChart(selector, chartData) draws an SVG org chart inside the
+     * element matched by `selector`.
+     *
+     * chartData = {
+     *   nodes: [ { id, label, x, y, w, h, type } ],
+     *   edges: [ { from, to, label, type, dash } ],
+     *   groups: [ { label, x, y, w, h, type } ],   // optional background groups
+     *   legends: [ { symbol, text } ],               // optional legend items
+     *   width, height                                 // SVG dimensions
+     * }
+     *
+     * Node types: "primary", "accent", "highlight", "area", "default", "branch-header", "small"
+     * Edge types: "vertical", "horizontal", "diagonal", "angle"
+     */
+    function renderOrgChart(selector, data) {
+      var container = document.querySelector(selector);
+      if (!container || !data) return;
+
+      var svg = d3.select(selector)
+        .append("svg")
+        .attr("width", data.width)
+        .attr("height", data.height)
+        .attr("viewBox", "0 0 " + data.width + " " + data.height)
+        .style("max-width", "100%")
+        .style("height", "auto");
+
+      // Define arrow markers
+      var defs = svg.append("defs");
+      defs.append("marker")
+        .attr("id", "arrowBrown-" + selector.replace(/[^a-zA-Z0-9]/g, ""))
+        .attr("viewBox", "0 0 10 6")
+        .attr("refX", 10)
+        .attr("refY", 3)
+        .attr("markerWidth", 8)
+        .attr("markerHeight", 5)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,0 L10,3 L0,6 Z")
+        .attr("fill", "#c4956a");
+
+      var markerId = "url(#arrowBrown-" + selector.replace(/[^a-zA-Z0-9]/g, "") + ")";
+
+      // Style maps
+      var boxStyles = {
+        "default":        { fill: "rgba(50,44,38,0.8)",  stroke: "#7a6a5a", textFill: "#e0d8d0", fontWeight: 500, fontSize: 11 },
+        "primary":        { fill: "rgba(196,149,106,0.15)", stroke: "#c4956a", textFill: "#f0e0c8", fontWeight: 600, fontSize: 11 },
+        "accent":         { fill: "rgba(232,145,58,0.15)",  stroke: "#e8913a", textFill: "#f5c890", fontWeight: 600, fontSize: 11 },
+        "highlight":      { fill: "rgba(232,145,58,0.25)",  stroke: "#e8913a", textFill: "#ffe0b0", fontWeight: 700, fontSize: 11 },
+        "area":           { fill: "rgba(40,36,32,0.5)",   stroke: "#7a6a5a", textFill: "#b0a898", fontWeight: 400, fontSize: 10, dash: "4,2" },
+        "small":          { fill: "rgba(50,44,38,0.8)",  stroke: "#7a6a5a", textFill: "#e0d8d0", fontWeight: 500, fontSize: 10 },
+        "branch-header":  { fill: "none",                  stroke: "#e8913a", textFill: "#e8913a", fontWeight: 700, fontSize: 12, strokeWidth: 2, rx: 12 },
+        "section-title":  { fill: "none",                  stroke: "none",    textFill: "#e8913a", fontWeight: 700, fontSize: 13 },
+        "subtitle":       { fill: "none",                  stroke: "none",    textFill: "#c4956a", fontWeight: 600, fontSize: 11 },
+        "note":           { fill: "none",                  stroke: "none",    textFill: "#a09080", fontWeight: 400, fontSize: 9, fontStyle: "italic" },
+        "coop":           { fill: "rgba(40,36,32,0.3)",  stroke: "#7a6a5a", textFill: "#c4956a", fontWeight: 600, fontSize: 9, dash: "3,2" },
+        "sec-box":        { fill: "rgba(50,44,38,0.7)",  stroke: "#7a6a5a", textFill: "#d0c8b8", fontWeight: 500, fontSize: 11 },
+        "sec-result":     { fill: "rgba(196,149,106,0.12)", stroke: "#c4956a", textFill: "#e8d0b0", fontWeight: 600, fontSize: 11 },
+        "div-header":     { fill: "rgba(50,44,38,0.8)",  stroke: "#5a5048", textFill: "#e0d0c0", fontWeight: 600, fontSize: 10 },
+        "div-header-active": { fill: "rgba(50,44,38,0.8)", stroke: "#c4956a", textFill: "#e8913a", fontWeight: 600, fontSize: 10 },
+        "div-body":       { fill: "rgba(40,36,32,0.6)",  stroke: "#5a5048", textFill: "#d0c0a8", fontWeight: 400, fontSize: 10 },
+        "div-body-active": { fill: "rgba(196,149,106,0.06)", stroke: "#c4956a", textFill: "#d0c0a8", fontWeight: 400, fontSize: 11 },
+      };
+
+      // Render optional groups (background rectangles)
+      if (data.groups) {
+        data.groups.forEach(function(g) {
+          var s = boxStyles[g.type] || boxStyles["default"];
+          svg.append("rect")
+            .attr("x", g.x).attr("y", g.y)
+            .attr("width", g.w).attr("height", g.h)
+            .attr("rx", s.rx || 5)
+            .attr("fill", s.fill)
+            .attr("stroke", s.stroke)
+            .attr("stroke-width", s.strokeWidth || 1)
+            .attr("stroke-dasharray", s.dash || null);
+        });
+      }
+
+      // Render edges
+      if (data.edges) {
+        data.edges.forEach(function(e) {
+          var line = svg.append("line")
+            .attr("x1", e.x1).attr("y1", e.y1)
+            .attr("x2", e.x2).attr("y2", e.y2)
+            .attr("stroke", "#c4956a")
+            .attr("stroke-width", 1.5);
+
+          if (e.dash) {
+            line.attr("stroke-dasharray", e.dash);
+          }
+          if (e.arrow !== false) {
+            line.attr("marker-end", markerId);
+          }
+
+          // Edge label
+          if (e.label) {
+            var mx = (e.x1 + e.x2) / 2;
+            var my = (e.y1 + e.y2) / 2;
+            var offsetX = e.labelOffsetX || 0;
+            var offsetY = e.labelOffsetY || 0;
+            // For vertical edges, place label to the right
+            if (Math.abs(e.x1 - e.x2) < 5) {
+              offsetX = offsetX || 4;
+            }
+            var labelLines = e.label.split("\n");
+            var labelG = svg.append("g");
+            labelLines.forEach(function(ll, li) {
+              labelG.append("text")
+                .attr("x", mx + offsetX)
+                .attr("y", my + offsetY + li * 11 - (labelLines.length - 1) * 5.5)
+                .attr("text-anchor", e.labelAnchor || "start")
+                .attr("font-size", 9)
+                .attr("font-weight", 600)
+                .attr("fill", "#c4956a")
+                .text(ll);
+            });
+          }
+        });
+      }
+
+      // Render nodes
+      if (data.nodes) {
+        data.nodes.forEach(function(n) {
+          var s = boxStyles[n.type] || boxStyles["default"];
+          var g = svg.append("g");
+          var rx = s.rx || 5;
+          var sw = s.strokeWidth || 1;
+
+          if (s.stroke !== "none") {
+            g.append("rect")
+              .attr("x", n.x).attr("y", n.y)
+              .attr("width", n.w).attr("height", n.h)
+              .attr("rx", rx)
+              .attr("fill", s.fill)
+              .attr("stroke", s.stroke)
+              .attr("stroke-width", sw)
+              .attr("stroke-dasharray", s.dash || null);
+          }
+
+          // Text (supports multiline via \n)
+          var lines = n.label.split("\n");
+          var totalTextH = lines.length * (s.fontSize + 2);
+          var startY = n.y + (n.h - totalTextH) / 2 + s.fontSize;
+
+          lines.forEach(function(line, li) {
+            g.append("text")
+              .attr("x", n.x + n.w / 2)
+              .attr("y", startY + li * (s.fontSize + 2))
+              .attr("text-anchor", "middle")
+              .attr("font-size", s.fontSize)
+              .attr("font-weight", s.fontWeight)
+              .attr("font-style", s.fontStyle || "normal")
+              .attr("fill", s.textFill)
+              .text(line);
+          });
+        });
+      }
+
+      // Render legend
+      if (data.legends) {
+        var legendY = data.height - 18;
+        var legendX = data.width / 2;
+        var totalW = 0;
+        data.legends.forEach(function(l) { totalW += (l.symbol.length + l.text.length) * 6 + 24; });
+        var curX = legendX - totalW / 2;
+
+        // Legend separator line
+        svg.append("line")
+          .attr("x1", 10).attr("y1", legendY - 12)
+          .attr("x2", data.width - 10).attr("y2", legendY - 12)
+          .attr("stroke", "#3a342e").attr("stroke-width", 1);
+
+        data.legends.forEach(function(l) {
+          svg.append("text")
+            .attr("x", curX).attr("y", legendY)
+            .attr("font-size", 10)
+            .attr("fill", "#8a8070")
+            .text(l.symbol + " = " + l.text);
+          curX += (l.symbol.length + l.text.length + 3) * 5.5 + 24;
+        });
+      }
+    }
   </script>
 
 </body>

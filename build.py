@@ -31,6 +31,27 @@ def write_file(path, content):
 # Markdown-to-HTML converter (basic, no external deps)
 # ---------------------------------------------------------------------------
 
+CHART_SYMBOLS = re.compile(r"[▼▲→←●◇×─►■]")
+
+
+def _is_chart_block(lines):
+    """Detect organizational chart / diagram blocks that need line breaks preserved.
+
+    Heuristics: a block of 3+ lines where most lines are short and/or contain
+    chart-like symbols (▼, →, ●, etc.).
+    """
+    if len(lines) < 3:
+        return False
+    chart_lines = 0
+    for line in lines:
+        stripped = line.strip()
+        has_symbol = bool(CHART_SYMBOLS.search(stripped))
+        is_short = len(stripped) < 60
+        if has_symbol or (is_short and len(lines) >= 4):
+            chart_lines += 1
+    return chart_lines / len(lines) >= 0.5
+
+
 def md_to_html(text):
     """Convert basic markdown to HTML: paragraphs, bold, headers, lists, tables, italic."""
     if not text or not text.strip():
@@ -118,8 +139,12 @@ def md_to_html(text):
             i += 1
 
         if para_lines:
-            text_content = " ".join(para_lines)
-            html_parts.append(f"<p>{inline_format(text_content)}</p>")
+            if _is_chart_block(para_lines):
+                formatted = "<br>\n".join(inline_format(l) for l in para_lines)
+                html_parts.append(f'<div class="chart">{formatted}</div>')
+            else:
+                text_content = " ".join(para_lines)
+                html_parts.append(f"<p>{inline_format(text_content)}</p>")
 
     return "\n".join(html_parts)
 

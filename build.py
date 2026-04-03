@@ -144,7 +144,7 @@ def parse_table(lines):
     rows = []
     for line in lines:
         # Skip separator lines like |---|---|
-        if re.match(r"^\|[\s\-:]+\|$", line):
+        if re.match(r"^\|[\s\-:|]+$", line):
             continue
         cells = [c.strip() for c in line.split("|")]
         # Remove empty first/last from leading/trailing |

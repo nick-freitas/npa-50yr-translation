@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>50 Years of Japanese Police</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      background: #16213e;
+      border-bottom: 1px solid #0f3460;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .header-title h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+
+    .header-title .subtitle {
+      font-size: 13px;
+      color: #8a8a9a;
+      font-weight: 400;
+    }
+
+    .page-indicator {
+      font-size: 13px;
+      color: #8a8a9a;
+      white-space: nowrap;
+    }
+
+    /* Main layout */
+    .container {
+      display: flex;
+      height: calc(100vh - 52px);
+      margin-top: 52px;
+    }
+
+    /* Left column - PDF images */
+    .pdf-column {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      background: #12121f;
+    }
+
+    .pdf-page {
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .pdf-page img {
+      max-width: 100%;
+      height: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-radius: 2px;
+    }
+
+    /* Right column - Text */
+    .text-column {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 32px;
+      background: #1a1a2e;
+      border-left: 1px solid #0f3460;
+    }
+
+    .text-page {
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid #1e2a45;
+    }
+
+    .text-page:last-child {
+      border-bottom: none;
+    }
+
+    .page-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #5a7abf;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1e2a45;
+    }
+
+    /* English - primary focus */
+    .english {
+      font-size: 17px;
+      line-height: 1.7;
+      color: #e0e0e0;
+      margin-bottom: 24px;
+    }
+
+    .english p {
+      margin-bottom: 12px;
+    }
+
+    .english h1, .english h2, .english h3, .english h4 {
+      color: #c0d0f0;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .english h1 { font-size: 22px; }
+    .english h2 { font-size: 20px; }
+    .english h3 { font-size: 18px; }
+    .english h4 { font-size: 17px; }
+
+    .english strong {
+      color: #c8d8f0;
+    }
+
+    .english ul, .english ol {
+      margin: 8px 0 12px 20px;
+    }
+
+    .english li {
+      margin-bottom: 6px;
+    }
+
+    .english table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+
+    .english th, .english td {
+      padding: 8px 12px;
+      border: 1px solid #2a3a5a;
+      text-align: left;
+    }
+
+    .english th {
+      background: #1e2a45;
+      font-weight: 600;
+    }
+
+    /* Japanese - secondary reference */
+    .japanese {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #e0e0e0;
+      opacity: 0.5;
+      padding-top: 16px;
+      border-top: 1px solid #1e2a45;
+    }
+
+    .japanese p {
+      margin-bottom: 10px;
+    }
+
+    .japanese h1, .japanese h2, .japanese h3, .japanese h4 {
+      color: #c0d0f0;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .japanese h1 { font-size: 18px; }
+    .japanese h2 { font-size: 16px; }
+    .japanese h3 { font-size: 15px; }
+    .japanese h4 { font-size: 14px; }
+
+    .japanese strong {
+      color: #c8d8f0;
+    }
+
+    .japanese ul, .japanese ol {
+      margin: 8px 0 10px 20px;
+    }
+
+    .japanese li {
+      margin-bottom: 4px;
+    }
+
+    .japanese table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+
+    .japanese th, .japanese td {
+      padding: 6px 10px;
+      border: 1px solid #2a3a5a;
+      text-align: left;
+    }
+
+    .japanese th {
+      background: #1e2a45;
+      font-weight: 600;
+    }
+
+    /* Scrollbar styling */
+    .pdf-column::-webkit-scrollbar,
+    .text-column::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .pdf-column::-webkit-scrollbar-track,
+    .text-column::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .pdf-column::-webkit-scrollbar-thumb,
+    .text-column::-webkit-scrollbar-thumb {
+      background: #2a3a5a;
+      border-radius: 4px;
+    }
+
+    .pdf-column::-webkit-scrollbar-thumb:hover,
+    .text-column::-webkit-scrollbar-thumb:hover {
+      background: #3a4a6a;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .pdf-column, .text-column {
+        flex: none;
+        height: 50vh;
+      }
+
+      .text-column {
+        border-left: none;
+        border-top: 1px solid #0f3460;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-title">
+      <h1>50 Years of Japanese Police</h1>
+      <span class="subtitle">日本警察50年の軌跡と新たなる展開</span>
+    </div>
+    <div class="page-indicator" id="pageIndicator">Page 1 of 23</div>
+  </div>
+
+  <div class="container">
+    <div class="pdf-column" id="pdfColumn">
+      <!-- PDF_PAGES -->
+    </div>
+    <div class="text-column" id="textColumn">
+      <!-- TEXT_PAGES -->
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const pdfCol = document.getElementById('pdfColumn');
+      const textCol = document.getElementById('textColumn');
+      const indicator = document.getElementById('pageIndicator');
+      const totalPages = 23;
+
+      let syncing = false;
+      let debounceTimer = null;
+
+      // Find which page is most visible in a column
+      function getCurrentPage(column, selector) {
+        const items = column.querySelectorAll(selector);
+        const colRect = column.getBoundingClientRect();
+        const colMid = colRect.top + colRect.height * 0.33;
+        let best = null;
+        let bestDist = Infinity;
+
+        for (const item of items) {
+          const rect = item.getBoundingClientRect();
+          const itemMid = rect.top + rect.height / 2;
+          const dist = Math.abs(itemMid - colMid);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = item;
+          }
+        }
+        return best ? parseInt(best.dataset.page, 10) : 1;
+      }
+
+      // Scroll a column so a given page element is at the top
+      function scrollToPage(column, selector, pageNum) {
+        const el = column.querySelector(selector + '[data-page="' + pageNum + '"]');
+        if (!el) return;
+        const colRect = column.getBoundingClientRect();
+        const elRect = el.getBoundingClientRect();
+        column.scrollTop += elRect.top - colRect.top;
+      }
+
+      // Update page indicator
+      function updateIndicator(pageNum) {
+        indicator.textContent = 'Page ' + pageNum + ' of ' + totalPages;
+      }
+
+      // Sync handler factory
+      function makeSyncHandler(source, sourceSelector, target, targetSelector) {
+        return function() {
+          if (syncing) return;
+
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(function() {
+            const page = getCurrentPage(source, sourceSelector);
+            syncing = true;
+            scrollToPage(target, targetSelector, page);
+            updateIndicator(page);
+            // Release lock after scroll settles
+            requestAnimationFrame(function() {
+              requestAnimationFrame(function() {
+                syncing = false;
+              });
+            });
+          }, 30);
+        };
+      }
+
+      pdfCol.addEventListener('scroll',
+        makeSyncHandler(pdfCol, '.pdf-page', textCol, '.text-page'));
+      textCol.addEventListener('scroll',
+        makeSyncHandler(textCol, '.text-page', pdfCol, '.pdf-page'));
+    })();
+  </script>
+
+</body>
+</html>
